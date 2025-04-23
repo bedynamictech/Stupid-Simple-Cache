@@ -1,13 +1,13 @@
 <?php
 /**
- * Plugin Name: Stupid Simple Cache
- * Description: Simple caching plugin: HTML minification, static HTML file caching, lazy load images and browser caching.
- * Version: 1.0.1
- * Author: Dynamic Technologies
- * Autor URI: https://bedynamic.tech
- * Plugin URI: https://github.com/bedynamictech/Stupid-Simple-Cache
- * License: GPLv2 or later
- * License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Plugin Name: Stupid Simple Cache
+Description: Simple caching plugin: HTML minification, static HTML file caching, lazy load images, browser caching.
+Version: 1.0.3
+Author: Dynamic Technologies
+Author URI: https://bedynamic.tech
+Plugin URI: https://github.com/bedynamictech/StupidSimpleCache
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -63,19 +63,13 @@ class Stupid_Simple_Cache {
         );
     }
 
-        /**
-     * Alphabetize submenu items but keep the main parent link first
-     */
     public function reorder_submenus() {
         global $submenu;
         if ( isset( $submenu['stupidsimple'] ) && is_array( $submenu['stupidsimple'] ) ) {
-            // Preserve the first entry (parent link)
             $first_item = array_shift( $submenu['stupidsimple'] );
-            // Sort remaining items by title
             uasort( $submenu['stupidsimple'], function( $a, $b ) {
                 return strcasecmp( $a[0], $b[0] );
             } );
-            // Rebuild with the parent link first
             array_unshift( $submenu['stupidsimple'], $first_item );
         }
     }
@@ -202,6 +196,28 @@ class Stupid_Simple_Cache {
             'title' => 'Clear Cache',
             'href'  => wp_nonce_url( admin_url( 'admin-post.php?action=sscache_clear_cache' ), 'sscache_clear' ),
         ) );
+    }
+
+    /** Handle cache clearing */
+    public function clear_cache_action() {
+        // Verify permissions and nonce
+        if ( ! current_user_can( 'manage_options' ) || ! check_admin_referer( 'sscache_clear' ) ) {
+            wp_die( esc_html__( 'Unauthorized', 'sscache' ), esc_html__( 'Error', 'sscache' ), array( 'response' => 403 ) );
+        }
+
+        $cache_dir = WP_CONTENT_DIR . '/cache/stupid-simple-cache/';
+        if ( is_dir( $cache_dir ) ) {
+            $files = glob( $cache_dir . '*.html' );
+            if ( is_array( $files ) ) {
+                foreach ( $files as $file ) {
+                    @unlink( $file );
+                }
+            }
+        }
+
+        // Redirect back
+        wp_safe_redirect( wp_get_referer() ?: home_url() );
+        exit;
     }
 }
 
