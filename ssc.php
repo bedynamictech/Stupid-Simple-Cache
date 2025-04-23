@@ -2,10 +2,11 @@
 /**
  * Plugin Name: Stupid Simple Cache
  * Description: Simple caching plugin: HTML minification, static HTML file caching, lazy load images and browser caching.
- * Version:     1.0.0
- * Author:      Dynamic Technologies
- * Plugin URI:  https://github.com/bedynamictech/Stupid-Simple-Cache
- * License:     GPLv2 or later
+ * Version: 1.0.1
+ * Author: Dynamic Technologies
+ * Autor URI: https://bedynamic.tech
+ * Plugin URI: https://github.com/bedynamictech/Stupid-Simple-Cache
+ * License: GPLv2 or later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  */
 
