@@ -1,13 +1,13 @@
 <?php
-/*
-Plugin Name: Stupid Simple Cache
-Description: Browser caching, HTML minification, static HTML file caching, lazy load images.
-Version: 1.1
-Author: Dynamic Technologies
-Author URI: https://bedynamic.tech
-Plugin URI: https://github.com/bedynamictech/Stupid-Simple-Cache
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+/**
+ * Plugin Name: Stupid Simple Cache
+ * Description: Browser caching, HTML minification, static HTML file caching, lazy load images.
+ * Version: 1.1.1
+ * Author: Dynamic Technologies
+ * Author URI: https://bedynamic.tech
+ * Plugin URI: https://github.com/bedynamictech/Stupid-Simple-Cache
+ * License: GPLv2 or later
+ * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -165,4 +165,12 @@ function sscache_browser_cache_headers() {
     if ( ! is_admin() ) {
         header( 'Cache-Control: public, max-age=' . DAY_IN_SECONDS );
     }
+}
+
+// Add Settings link on Plugins page
+add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'sscache_action_links' );
+function sscache_action_links( $links ) {
+    $settings_link = '<a href="' . admin_url( 'admin.php?page=sscache' ) . '">Settings</a>';
+    array_unshift( $links, $settings_link );
+    return $links;
 }
